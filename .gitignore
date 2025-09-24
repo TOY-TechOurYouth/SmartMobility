@@ -1,13 +1,37 @@
-# macOS
-.DS_Store
-
 # Python
 __pycache__/
 *.pyc
 *.pyo
-.venv/
+.env/
 venv/
-.env
+.DS_Store
 
 # VS Code
 .vscode/
+
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+*.csproj
+*.unityproj
+*.sln
+*.swp
+*.user
+*.pidb
+*.booproj
+.vs/
+.idea/
+.vscode/
+
+# Arduino
+*.hex
+*.elf
+
+# OS
+Thumbs.db
+.DS_Store
