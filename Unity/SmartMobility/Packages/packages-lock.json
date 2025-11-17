@@ -54,7 +54,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "2.10.2",
+      "version": "2.10.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -254,7 +254,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.arfoundation": {
-      "version": "6.2.0",
+      "version": "6.2.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -272,13 +272,13 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.arkit": {
-      "version": "6.2.0",
+      "version": "6.2.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.xr.core-utils": "2.2.2",
         "com.unity.xr.management": "4.4.0",
-        "com.unity.xr.arfoundation": "6.2.0",
+        "com.unity.xr.arfoundation": "6.2.1",
         "com.unity.editorcoroutines": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -304,7 +304,7 @@
     },
     "com.unity.xr.management": {
       "version": "4.5.3",
-      "depth": 0,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.xr": "1.0.0",
