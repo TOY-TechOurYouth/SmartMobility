@@ -2,7 +2,7 @@ import time
 import board
 import adafruit_icm20x
 import numpy as np
-from collections import deque
+import heapq  # 우선순위 큐를 위해 추가
 
 class SoundTracker:
     def __init__(self, address=0x69):
@@ -15,36 +15,41 @@ class SoundTracker:
             raise
 
         self.current_yaw = 0.0
-        self.target_queue = deque()  # 소리 방향을 저장할 큐 (최대 개수 제한 가능)
-        self.is_active = False       # 현재 이동/회전 중인지 여부
+        self.priority_queue = []  # (신뢰도, 목표각도)를 담을 리스트
+        self.is_active = False
         self.last_time = time.time()
         self.alpha = 0.95 
 
     def update_yaw_combined(self):
-        # (기존 상보필터 로직 동일)
-        gyro_z = self.icm.gyro[2] 
-        now = time.time()
-        dt = now - self.last_time
-        self.last_time = now
-        gyro_yaw = self.current_yaw + np.degrees(gyro_z) * dt
-        mag_x, mag_y, _ = self.icm.magnetic
-        mag_heading = np.degrees(np.arctan2(mag_y, mag_x))
-        self.current_yaw = self.alpha * gyro_yaw + (1 - self.alpha) * mag_heading
-        self.current_yaw %= 360
+        # 상보필터 로직 (기존과 동일)
+        try:
+            gyro_z = self.icm.gyro[2] 
+            now = time.time()
+            dt = now - self.last_time
+            self.last_time = now
+            gyro_yaw = self.current_yaw + np.degrees(gyro_z) * dt
+            mag_x, mag_y, _ = self.icm.magnetic
+            mag_heading = np.degrees(np.arctan2(mag_y, mag_x))
+            self.current_yaw = self.alpha * gyro_yaw + (1 - self.alpha) * mag_heading
+            self.current_yaw %= 360
+        except:
+            pass
         return self.current_yaw
 
-    def add_sound_target(self, relative_angle):
-        """새로운 소리가 들리면 큐에 추가"""
+    def add_sound_target(self, relative_angle, confidence):
+        """소리 방향과 신뢰도를 함께 저장 (신뢰도 높은 순 정렬)"""
         self.update_yaw_combined()
         absolute_target = (self.current_yaw + relative_angle) % 360
-        self.target_queue.append(absolute_target)
-        print(f"\n📥 소리 감지! 큐에 저장됨: {absolute_target:.1f}° (현재 큐 크기: {len(self.target_queue)})")
+        
+        # heapq는 최소 힙이므로, 큰 값이 먼저 나오게 하기 위해 confidence에 -를 붙임
+        heapq.heappush(self.priority_queue, (-confidence, absolute_target))
+        print(f"\n📥 소리 감지 (신뢰도: {confidence:.2f}) -> 큐 저장")
 
     def get_next_target(self):
-        """도착 후 다음 목표를 가져옴"""
-        if self.target_queue:
-            next_target = self.target_queue.popleft() # 첫 번째 소리 삭제 및 추출
+        """가장 신뢰도가 높은 목표를 꺼냄"""
+        if self.priority_queue:
+            neg_conf, target = heapq.heappop(self.priority_queue)
             self.is_active = True
-            return next_target
+            return target, -neg_conf # (목표각도, 원래 신뢰도) 반환
         self.is_active = False
-        return None
+        return None, None
