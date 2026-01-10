@@ -122,25 +122,22 @@ def calculate_snr(signal_data, noise_threshold=1000):
     Returns:
         tuple: (평균 RMS, 신뢰도 점수)
     """
-    # 신호의 평균 제곱근 (RMS) 계산
-    # 수정 코드: (데이터가 0일 경우 1e-10을 더하여 0 나누기 방지)
-    rms_L = np.sqrt(np.mean(signal_data[:, 0]**2))
-    rms_R = np.sqrt(np.mean(signal_data[:, 1]**2))
+    # 데이터를 float64로 변환하여 계산 시 오버플로우 방지
+    data_L = signal_data[:, 0].astype(np.float64)
+    data_R = signal_data[:, 1].astype(np.float64)
+    
+    # 평균 제곱 값 계산 (0보다 작은 값이 나오지 않도록 max 처리)
+    mean_sq_L = np.max([np.mean(data_L**2), 0])
+    mean_sq_R = np.max([np.mean(data_R**2), 0])
+    
+    rms_L = np.sqrt(mean_sq_L)
+    rms_R = np.sqrt(mean_sq_R)
+    
     avg_rms = (rms_L + rms_R) / 2
     
-    # RMS가 임계값보다 클수록 신뢰도가 높다고 가정
-    # 신뢰도 점수
-    # 0 나누기 방지를 위한 작은 상수 정의
-    EPSILON = 1e-10
-
-    # 분모가 0이 되는 것을 방지
-    denominator = 2000000 - noise_threshold
-    if denominator < EPSILON:
-        # 분모가 0에 가까우면 신뢰도 계산 불가능
-        return avg_rms, np.nan 
-
-    # 신뢰도 계산 (분모 안정화 버전)
-    confidence = np.clip((avg_rms - noise_threshold) / denominator, 0.0, 1.0)
+    # 신뢰도 점수 (int32 범위에 맞춰 분모 조절)
+    confidence = np.clip((avg_rms - noise_threshold) / 1000000, 0.0, 1.0)
+    
     return avg_rms, confidence
 
 
@@ -148,11 +145,9 @@ def calculate_snr(signal_data, noise_threshold=1000):
 def run_direction_finder():
     # 사운드 장치 설정 (이전에 찾은 장치 인덱스를 사용하거나, 재검색)
     try:
-        # 이전에 find_i2s_device 함수를 통해 찾은 인덱스를 사용하거나
-        # 여기서 기본 입력 장치를 사용합니다.
-        # 장치 인덱스를 직접 지정하는 것이 안정적입니다.
-        input_device_index = sd.default.device[0] # 기본 입력 장치 사용
-        
+        # python3 -m sounddevice로 확인한 Google Voice HAT의 인덱스 넣기
+        input_device_index = 1
+
         # 2채널 입력이 가능한지 확인
         dev_info = sd.query_devices(input_device_index, 'input')
         if dev_info['max_input_channels'] < 2:
