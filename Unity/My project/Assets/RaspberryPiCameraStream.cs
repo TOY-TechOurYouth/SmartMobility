@@ -10,7 +10,7 @@ public class RaspberryPiCameraStream : MonoBehaviour
     public Renderer targetRenderer;
     
     [Header("Stream Settings")]
-    public string cameraURL = "http://172.20.10.6:8080/?action=stream";
+    public string cameraURL = "http://raspberrypi.local:8080/?action=stream";
     public bool autoStart = true;
     
     [Header("Status")]

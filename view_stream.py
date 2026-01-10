@@ -1,6 +1,6 @@
 import cv2
 
-STREAM_URL = "http://192.168.45.246:8080/?action=stream"
+STREAM_URL = "http://172.20.10.6:8080/?action=stream"
 
 def main():
     cap = cv2.VideoCapture(STREAM_URL)
