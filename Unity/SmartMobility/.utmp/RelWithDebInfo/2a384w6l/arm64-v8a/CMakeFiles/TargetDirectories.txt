@@ -1,5 +1,0 @@
-/Users/injoo/Documents/GitHub/SmartMobility/Unity/SmartMobility/.utmp/RelWithDebInfo/2a384w6l/arm64-v8a/CMakeFiles/edit_cache.dir
-/Users/injoo/Documents/GitHub/SmartMobility/Unity/SmartMobility/.utmp/RelWithDebInfo/2a384w6l/arm64-v8a/CMakeFiles/rebuild_cache.dir
-/Users/injoo/Documents/GitHub/SmartMobility/Unity/SmartMobility/.utmp/RelWithDebInfo/2a384w6l/arm64-v8a/GameActivity/CMakeFiles/game.dir
-/Users/injoo/Documents/GitHub/SmartMobility/Unity/SmartMobility/.utmp/RelWithDebInfo/2a384w6l/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
-/Users/injoo/Documents/GitHub/SmartMobility/Unity/SmartMobility/.utmp/RelWithDebInfo/2a384w6l/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir
