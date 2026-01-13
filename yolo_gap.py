@@ -3,7 +3,7 @@ import numpy as np
 from ultralytics import YOLO
 
 # 웹캠 스트리밍 주소
-STREAM_URL = "http://192.168.45.246:8080/?action=stream"
+STREAM_URL = "http://172.20.10.6:8080/?action=stream"
 
 # 아래 띠(ROI) 비율
 ROI_TOP_RATIO = 0.6   # 아래 40% 정도를 바닥 띠로 사용
